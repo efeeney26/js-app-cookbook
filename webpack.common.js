@@ -12,11 +12,11 @@ const isProdMode = NODE_ENV === 'production'
 
 module.exports = {
     mode: NODE_ENV,
-    entry: './src/index.jsx',
+    entry: './src/index.tsx',
     module: {
         rules: [
             {
-                test: /\.(js|jsx)$/,
+                test: /\.([jt])s(x)?$/,
                 exclude: /(node_modules)/,
                 use: {
                     loader: 'babel-loader',
@@ -25,7 +25,8 @@ module.exports = {
                         cacheDirectory: true,
                         presets: [
                             '@babel/preset-env',
-                            '@babel/preset-react'
+                            '@babel/preset-react',
+                            '@babel/preset-typescript'
                         ],
                         plugins: [
                             '@babel/plugin-transform-runtime'
@@ -81,7 +82,7 @@ module.exports = {
         ] : [])
     ],
     resolve: {
-        extensions: ['.jsx', '.js'],
+        extensions: ['.jsx', '.js', '.tsx', '.ts'],
         modules: [path.resolve(__dirname, 'src'), 'node_modules']
     }
 }
