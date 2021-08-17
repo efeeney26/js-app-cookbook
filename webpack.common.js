@@ -1,4 +1,5 @@
 const path = require('path')
+const webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const MiniCssExtractPlugin = require("mini-css-extract-plugin")
 
@@ -6,12 +7,12 @@ const {
     NODE_ENV
 } = process.env
 
-const devMode = NODE_ENV === 'development'
-const prodMode = NODE_ENV === 'production'
+const isDevMode = NODE_ENV === 'development'
+const isProdMode = NODE_ENV === 'production'
 
 module.exports = {
     mode: NODE_ENV,
-    entry: './src/index.js',
+    entry: './src/index.jsx',
     module: {
         rules: [
             {
@@ -35,7 +36,7 @@ module.exports = {
             {
                 test: /\.css$/i,
                 use: [
-                    devMode ? "style-loader" : MiniCssExtractPlugin.loader,
+                    isDevMode ? "style-loader" : MiniCssExtractPlugin.loader,
                     {
                         loader: "css-loader",
                         options: {
@@ -57,7 +58,7 @@ module.exports = {
         ]
     },
     output: {
-        path: path.resolve(__dirname, devMode ? 'build-dev' : 'build-prod'),
+        path: path.resolve(__dirname, isDevMode ? 'build-dev' : 'build-prod'),
         filename: 'js/[name].[contenthash].js',
         assetModuleFilename: 'assets/[name].[contenthash][ext]',
         chunkFilename: '[name].[contenthash].js',
@@ -69,7 +70,10 @@ module.exports = {
             title: 'Test react',
             template: 'public/index.html'
         }),
-        ...(prodMode ? [
+        new webpack.EnvironmentPlugin({
+            NODE_ENV
+        }),
+        ...(isProdMode ? [
             new MiniCssExtractPlugin({
                 filename: "[name].css",
                 chunkFilename: "[id].css",

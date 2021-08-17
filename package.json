@@ -1,10 +1,13 @@
 {
   "name": "js-app-cookbook",
   "version": "1.0.0",
-  "description": "React ",
-  "main": "index.js",
+  "description": "React",
+  "main": "./src/index.jsx",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "webpack serve --node-env development --open --config webpack.dev.js",
+    "build:dev": "webpack --node-env development --config webpack.dev.js",
+    "build:prod": "webpack --node-env production --config webpack.prod.js",
+    "build": "npm run build:dev & npm run build:prod"
   },
   "repository": {
     "type": "git",
@@ -22,12 +25,19 @@
     "@babel/plugin-transform-runtime": "^7.15.0",
     "@babel/preset-env": "^7.15.0",
     "@babel/preset-react": "^7.14.5",
+    "babel-loader": "^8.2.2",
+    "css-loader": "^6.2.0",
     "css-minimizer-webpack-plugin": "^3.0.2",
     "html-webpack-plugin": "^5.3.2",
     "mini-css-extract-plugin": "^2.2.0",
+    "style-loader": "^3.2.1",
     "webpack": "^5.50.0",
     "webpack-cli": "^4.8.0",
     "webpack-dev-server": "^3.11.2",
     "webpack-merge": "^5.8.0"
+  },
+  "dependencies": {
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
   }
 }
