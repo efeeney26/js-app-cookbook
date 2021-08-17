@@ -5,9 +5,7 @@
   "main": "./src/index.jsx",
   "scripts": {
     "start": "webpack serve --node-env development --open --config webpack.dev.js",
-    "build:dev": "webpack --node-env development --config webpack.dev.js",
-    "build:prod": "webpack --node-env production --config webpack.prod.js",
-    "build": "npm run build:dev & npm run build:prod"
+    "build": "webpack --node-env production --config webpack.prod.js"
   },
   "repository": {
     "type": "git",
@@ -32,6 +30,7 @@
     "mini-css-extract-plugin": "^2.2.0",
     "react-hot-loader": "^4.13.0",
     "style-loader": "^3.2.1",
+    "terser-webpack-plugin": "^5.1.4",
     "webpack": "^5.50.0",
     "webpack-cli": "^4.8.0",
     "webpack-dev-server": "^3.11.2",
