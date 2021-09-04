@@ -1,10 +1,10 @@
 declare module '*module.css' {
-    const moduleCss: Record<string, any>;
-    export default moduleCss;
+    const moduleCss: Record<string, string>
+    export default moduleCss
 }
 
 declare module '.css' {
-    const css: string;
+    const css: string
     export default css
 }
 
