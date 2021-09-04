@@ -6,3 +6,4 @@
 3. Babel 7
 4. Typescript 4 (@babel/preset-typescript)
 5. EsLint 7 (eslint-config-airbnb-typescript)
+6. Emotion 11

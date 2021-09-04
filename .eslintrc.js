@@ -5,7 +5,8 @@ module.exports = {
         browser: true
     },
     plugins: [
-        '@typescript-eslint'
+        '@typescript-eslint',
+        '@emotion'
     ],
     parser: '@typescript-eslint/parser',
     parserOptions: {
@@ -53,7 +54,9 @@ module.exports = {
             },
         ],
         'no-console': 'off',
-        'no-trailing-spaces': 'off'
+        'no-trailing-spaces': 'off',
+        'import/prefer-default-export': 'off',
+        'react/require-default-props': 'off'
     },
     settings: {
         'import/resolver': {
