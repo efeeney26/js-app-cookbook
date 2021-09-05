@@ -53,7 +53,7 @@ module.exports = {
                 trailingUnderscore: 'allow',
             },
         ],
-        'no-console': 'off',
+        'no-console': 'warn',
         'no-trailing-spaces': 'off',
         'import/prefer-default-export': 'off',
         'react/require-default-props': 'off'
