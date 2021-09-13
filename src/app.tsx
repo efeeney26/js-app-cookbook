@@ -1,6 +1,4 @@
 import React, { FC, useState } from 'react'
-// eslint-disable-next-line import/no-extraneous-dependencies
-import { hot } from 'react-hot-loader'
 import { CacheProvider, Global } from '@emotion/react'
 import createCache from '@emotion/cache'
 
@@ -57,4 +55,4 @@ const App: FC = () => {
     )
 }
 
-export default hot(module)(App)
+export default App

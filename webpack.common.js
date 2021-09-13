@@ -2,6 +2,7 @@ const path = require('path')
 const webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const MiniCssExtractPlugin = require("mini-css-extract-plugin")
+const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin')
 
 const {
     NODE_ENV
@@ -30,7 +31,8 @@ module.exports = {
                         ],
                         plugins: [
                             '@emotion',
-                            '@babel/plugin-transform-runtime'
+                            '@babel/plugin-transform-runtime',
+                            ...(isDevMode ? ['react-refresh/babel'] : [])
                         ]
                     }
                 }
@@ -75,6 +77,12 @@ module.exports = {
         new webpack.EnvironmentPlugin({
             NODE_ENV
         }),
+        ...(isDevMode ? [
+            new ReactRefreshWebpackPlugin({
+                overlay: false
+            }),
+            new webpack.HotModuleReplacementPlugin()
+        ] : []),
         ...(isProdMode ? [
             new MiniCssExtractPlugin({
                 filename: "css/[name].[contenthash].css",
