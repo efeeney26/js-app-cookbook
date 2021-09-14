@@ -78,10 +78,7 @@ module.exports = {
             NODE_ENV
         }),
         ...(isDevMode ? [
-            new ReactRefreshWebpackPlugin({
-                overlay: false
-            }),
-            new webpack.HotModuleReplacementPlugin()
+            new ReactRefreshWebpackPlugin(),
         ] : []),
         ...(isProdMode ? [
             new MiniCssExtractPlugin({
