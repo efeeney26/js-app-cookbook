@@ -2,7 +2,7 @@
   "name": "js-app-cookbook",
   "version": "1.0.0",
   "description": "React",
-  "main": "./src/index.tsx",
+  "private": true,
   "scripts": {
     "start": "concurrently -k \"npm run start:dev\" \"npm run start:stub\"",
     "start:dev": "webpack serve --node-env development --open --config webpack.dev.js",
