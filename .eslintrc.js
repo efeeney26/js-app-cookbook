@@ -56,7 +56,8 @@ module.exports = {
         'no-console': 'warn',
         'no-trailing-spaces': 'off',
         'import/prefer-default-export': 'off',
-        'react/require-default-props': 'off'
+        'react/require-default-props': 'off',
+        'no-void': 'off'
     },
     settings: {
         'import/resolver': {

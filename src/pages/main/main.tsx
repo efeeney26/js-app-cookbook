@@ -1,26 +1,15 @@
-import React, { FC, useState } from 'react'
+import React, { FC } from 'react'
 import pic from '../../assets/images/pic.png'
 import { Button } from '../../components'
-import { axiosInstance } from '../../__data__'
+import { useAppDispatch, useAppSelector } from '../../app/store'
+import { getGreetingsThunk } from './slice/thunks'
 
-type Response = {
-    data: {
-        title: string
-    }
-}
+const Main: FC = () => {
+    const dispatch = useAppDispatch()
+    const { data } = useAppSelector((state) => state.greetings)
 
-export const Main: FC = () => {
-    const [message, setMessage] = useState<string | null>(null)
-
-    const handleClick = async () => {
-        try {
-            const response: Response = await axiosInstance.get('/greetings')
-            if (response?.data?.title) {
-                setMessage(response.data.title)
-            }
-        } catch (e) {
-            throw new Error()
-        }
+    const handleClick = () => {
+        void dispatch(getGreetingsThunk())
     }
 
     return (
@@ -36,9 +25,11 @@ export const Main: FC = () => {
                 title="Нажми на кнопку на emotion"
                 onClick={handleClick}
             />
-            {message &&
-            <p>{message}</p>
+            {data?.title &&
+                <p>{data.title}</p>
             }
         </>
     )
 }
+
+export default Main
