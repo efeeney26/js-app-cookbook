@@ -1,10 +1,10 @@
 import axios, { AxiosResponse } from 'axios'
 
-import { IGreetings } from '../../pages/main/slice/slice'
+import { IGreetings } from '../../pages/main/constants'
 
 type ApiResponse<T> = Promise<AxiosResponse<T>>
 
-interface IApiClient {
+export interface IApiClient {
     getGreetings(): ApiResponse<IGreetings>
 }
 
@@ -25,4 +25,6 @@ class ApiClient implements IApiClient {
     }
 }
 
-export default new ApiClient()
+const apiClient: IApiClient = new ApiClient()
+
+export default apiClient
