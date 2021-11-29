@@ -15,8 +15,11 @@ const initialState: IGenericState<null, Record<string, unknown>> = {
 }
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export const createGenericSlice = <AsyncThunkRequestPayload, AsyncThunkResponsePayload, ExtraState>
-({
+export const createGenericSlice = <
+    AsyncThunkRequestPayload,
+    AsyncThunkResponsePayload,
+    ExtraState
+>({
     name = '',
     extraState = {} as ExtraState,
     reducers,

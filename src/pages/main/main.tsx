@@ -4,6 +4,7 @@ import { Button } from '../../components'
 import { useAppDispatch, useAppSelector } from '../../app/store'
 import { getGreetingsThunk } from './slice/thunks'
 import { greetingsSlice } from './slice/slice'
+import { ActionsContainerStyled } from './main.style'
 
 const Main: FC = () => {
     const dispatch = useAppDispatch()
@@ -26,14 +27,16 @@ const Main: FC = () => {
                     alt="demo"
                 />
             </div>
-            <Button
-                title="Нажми на кнопку на emotion для асинхронного экшна"
-                onClick={handleAsyncActionClick}
-            />
-            <Button
-                title="Нажми на кнопку на emotion для синхронного экшна"
-                onClick={handleSyncActionClick}
-            />
+            <ActionsContainerStyled>
+                <Button
+                    title="Нажми на кнопку на emotion для асинхронного экшна"
+                    onClick={handleAsyncActionClick}
+                />
+                <Button
+                    title="Нажми на кнопку на emotion для синхронного экшна"
+                    onClick={handleSyncActionClick}
+                />
+            </ActionsContainerStyled>
             {data?.title &&
                 <p>{data.title}</p>
             }
