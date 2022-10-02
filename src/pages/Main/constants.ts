@@ -1,3 +1,3 @@
 export interface IGreetings {
-    title: string
+  title: string
 }

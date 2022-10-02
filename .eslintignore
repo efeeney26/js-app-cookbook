@@ -1,8 +1,1 @@
-node_modules
-build-dev
-build-prod
-.eslintrc.js
-webpack.common.js
-webpack.dev.js
-webpack.prod.js
-stub
+**/*.js

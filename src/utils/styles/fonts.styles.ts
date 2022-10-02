@@ -1,8 +1,8 @@
-import { css } from '@emotion/react'
+import { css } from '@emotion/react';
 
-import OpenSansRegularBold from '../../assets/fonts/OpenSansCondensed-Bold.ttf'
-import OpenSansCondensedLight from '../../assets/fonts/OpenSansCondensed-Light.ttf'
-import OpenSansCondensedLightItalic from '../../assets/fonts/OpenSansCondensed-LightItalic.ttf'
+import OpenSansRegularBold from '../../assets/fonts/OpenSansCondensed-Bold.ttf';
+import OpenSansCondensedLight from '../../assets/fonts/OpenSansCondensed-Light.ttf';
+import OpenSansCondensedLightItalic from '../../assets/fonts/OpenSansCondensed-LightItalic.ttf';
 
 const fontsStyles = css`
   @font-face {
@@ -25,6 +25,6 @@ const fontsStyles = css`
     font-weight: normal;
     font-style: normal;
 }
-`
+`;
 
-export default fontsStyles
+export default fontsStyles;

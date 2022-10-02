@@ -1,5 +1,5 @@
-import getGlobalStyles from './styles/global.styles'
+import getGlobalStyles from './styles/global.styles';
 
 export {
-    getGlobalStyles
-}
+  getGlobalStyles,
+};

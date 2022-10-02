@@ -1,6 +1,6 @@
-import { css } from '@emotion/react'
+import { css } from '@emotion/react';
 
-import fontsStyles from './fonts.styles'
+import fontsStyles from './fonts.styles';
 
 const getGlobalStyles = (): ReturnType<typeof css> => css`
     ${fontsStyles}
@@ -29,6 +29,6 @@ const getGlobalStyles = (): ReturnType<typeof css> => css`
     border: 0;
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   }
-`
+`;
 
-export default getGlobalStyles
+export default getGlobalStyles;

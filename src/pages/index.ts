@@ -1,5 +1,5 @@
-import Main from './main/main'
+import Main from './Main/Main';
 
 export {
-    Main
-}
+  Main,
+};
