@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from 'axios';
 
-import { IGreetings } from '../../pages/Main/constants';
+import { IGreetings } from '../../pages/Demo/constants';
 
 type ApiResponse<T> = Promise<AxiosResponse<T>>;
 
