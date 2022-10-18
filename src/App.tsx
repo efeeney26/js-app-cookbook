@@ -1,20 +1,21 @@
 import React, { FC } from 'react';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
-import { Global, ThemeProvider } from '@emotion/react';
+import {
+  ThemeProvider, createTheme,
+} from '@mui/material/styles';
+import GlobalStyles from '@mui/material/GlobalStyles';
 
 import { store } from './store';
-import { getGlobalStyles } from './utils';
+import { getGlobalStyles } from './styles';
 import { Routes } from './routes/Routes';
 
-const theme = {
-  colors: {},
-};
+const theme = createTheme();
 
 const App: FC = () => (
   <Provider store={store}>
     <ThemeProvider theme={theme}>
-      <Global styles={getGlobalStyles} />
+      <GlobalStyles styles={getGlobalStyles} />
       <BrowserRouter>
         <Routes />
       </BrowserRouter>
