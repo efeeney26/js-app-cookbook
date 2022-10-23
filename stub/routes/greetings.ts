@@ -1,6 +1,6 @@
-const router = require('express').Router()
+import { Router } from 'express';
 
-router
+export const router = Router()
     .get('/greetings', (req, res) => {
         setTimeout(() => {
             res.send({
@@ -9,4 +9,3 @@ router
         }, 1000)
     })
 
-module.exports = router
