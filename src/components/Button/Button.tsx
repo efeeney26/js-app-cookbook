@@ -8,7 +8,6 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 const Button: FC<ButtonProps> = ({ title, ...props }: ButtonProps) => (
   <StyledButton
-        /* eslint-disable-next-line react/jsx-props-no-spreading */
     {...props}
   >
     {title || 'Нажать'}

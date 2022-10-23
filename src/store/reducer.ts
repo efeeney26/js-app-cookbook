@@ -1,6 +1,9 @@
 import { combineReducers } from '@reduxjs/toolkit';
-import { greetingsSlice } from '../pages/Demo/slice/slice';
+
+import { reducerPath, reducer as apiReducer } from '../services';
+import { syncSlice } from '../pages/Demo/slice/slice';
 
 export const reducer = combineReducers({
-  greetings: greetingsSlice.reducer,
+  sync: syncSlice.reducer,
+  [reducerPath]: apiReducer,
 });

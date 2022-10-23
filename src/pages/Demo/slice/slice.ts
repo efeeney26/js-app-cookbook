@@ -1,10 +1,9 @@
-import { createGenericSlice } from '../../../store/generic-slice';
-import { getGreetingsThunk } from './thunks';
+import { createSlice } from '@reduxjs/toolkit';
 
-export const greetingsSlice = createGenericSlice({
-  name: 'greeting',
-  extraState: {
-    syncActionData: 'init',
+export const syncSlice = createSlice({
+  name: 'sync',
+  initialState: {
+    syncActionData: '',
   },
   reducers: {
     syncReducer: (state, { payload }: { payload: string }) => ({
@@ -12,5 +11,4 @@ export const greetingsSlice = createGenericSlice({
       syncActionData: payload,
     }),
   },
-  asyncThunk: getGreetingsThunk,
 });

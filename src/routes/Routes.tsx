@@ -8,7 +8,7 @@ export const Routes = () => useRoutes([
     element: <Main />,
   },
   {
-    path: '/demo',
+    path: 'demo',
     element: <Demo />,
   },
 ]);

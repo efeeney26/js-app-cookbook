@@ -8,7 +8,7 @@ const Main: FC = () => (
     <h1>Привет, это главная</h1>
     <nav>
       {navigation.map(({ to, title }) => (
-        <Link to={to}>
+        <Link key={to} to={to}>
           <p>{title}</p>
         </Link>
       ))}

@@ -1,22 +1,24 @@
 import React, { FC, useCallback } from 'react';
 
 import { useAppDispatch, useAppSelector } from '../../store';
-import { getGreetingsThunk } from './slice/thunks';
-import { greetingsSlice } from './slice/slice';
+import { syncSlice } from './slice/slice';
+import { getSyncData } from './slice/selectors';
 import pic from '../../assets/images/pic.png';
 import { ActionsContainerStyled } from '../Main/Main.style';
 import { Button } from '../../components';
+import { useLazyGetGreetingsQuery } from '../../services';
 
 export const Demo: FC = () => {
   const dispatch = useAppDispatch();
-  const { data, syncActionData } = useAppSelector((state) => state.greetings);
+  const [getGreetingsQuery, { data }] = useLazyGetGreetingsQuery();
+  const syncActionData = useAppSelector(getSyncData);
 
-  const handleAsyncActionClick = useCallback(() => {
-    dispatch(getGreetingsThunk());
-  }, [dispatch]);
+  const handleAsyncActionClick = useCallback(async () => {
+    await getGreetingsQuery();
+  }, [getGreetingsQuery]);
 
   const handleSyncActionClick = useCallback(() => {
-    dispatch(greetingsSlice.actions.syncReducer('syncData'));
+    dispatch(syncSlice.actions.syncReducer('syncData'));
   }, [dispatch]);
 
   return (

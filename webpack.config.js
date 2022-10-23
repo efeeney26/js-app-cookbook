@@ -4,6 +4,7 @@ const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 const ReactRefreshTypeScript = require('react-refresh-typescript');
 const TerserPlugin = require('terser-webpack-plugin');
+const ESLintPlugin = require('eslint-webpack-plugin');
 
 const {
   NODE_ENV = 'development'
@@ -68,7 +69,11 @@ module.exports = {
     }),
     new ForkTsCheckerWebpackPlugin(),
     ...(isProductionMode ? [] : [
-      new ReactRefreshWebpackPlugin()
+      new ReactRefreshWebpackPlugin(),
+      new ESLintPlugin({
+        files: './**/*.{js,jsx,ts,tsx}',
+        cache: true,
+      })
     ])
   ],
   output: {
@@ -80,6 +85,7 @@ module.exports = {
   },
   devServer: {
     port: 3000,
+    historyApiFallback: true,
     hot: true,
     open: true,
     proxy: [
