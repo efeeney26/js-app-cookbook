@@ -8,3 +8,4 @@
 5. EsLint @8 (eslint-config-airbnb-typescript)
 6. Emotion @11
 7. Mui @5
+8. Redux toolkit @1
