@@ -6,7 +6,7 @@ const app = express()
 const port = process.env.PORT || 8080
 
 app
-    .use('/api', greetings)
+  .use('/api', greetings)
 
 app.listen(port, () => {
     console.log(`App listening at http://localhost:${port}`)
