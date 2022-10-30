@@ -1,10 +1,12 @@
 import React, { FC, useCallback } from 'react';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
 
 import { useAppDispatch, useAppSelector } from '../../store';
 import { syncSlice } from './slice/slice';
 import { getSyncData } from './slice/selectors';
 import pic from '../../assets/images/pic.png';
-import { ActionsContainerStyled } from '../Main/Main.style';
+import { ActionsContainerStyled } from './Demo.style';
 import { Button } from '../../components';
 import { useLazyGetGreetingsQuery } from '../../services';
 
@@ -22,14 +24,14 @@ export const Demo: FC = () => {
   }, [dispatch]);
 
   return (
-    <>
-      <div>
-        <h1>Демо-страница</h1>
+    <Box pt={3} minHeight="100vh">
+      <>
+        <Typography variant="h3">Демо-страница</Typography>
         <img
           src={pic}
           alt="demo"
         />
-      </div>
+      </>
       <ActionsContainerStyled>
         <Button
           title="Нажми на кнопку на emotion для асинхронного экшна"
@@ -43,7 +45,7 @@ export const Demo: FC = () => {
       {data?.title
         && <p>{data.title}</p>}
       <p>{syncActionData}</p>
-    </>
+    </Box>
   );
 };
 
