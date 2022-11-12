@@ -30,6 +30,7 @@
   },
   "include": [
     "./src",
+    "./stub"
   ],
   "exclude": ["node_modules", "build"],
   "ts-node": {

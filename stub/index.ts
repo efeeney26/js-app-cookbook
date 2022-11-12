@@ -1,13 +1,14 @@
+// eslint-disable-next-line import/no-extraneous-dependencies
 import express from 'express';
 
-import { router as greetings } from "./routes/greetings";
+import { greetingsRouter } from './api/routes';
 
-const app = express()
-const port = process.env.PORT || 8080
+const app = express();
+const port = process.env.PORT || 8080;
 
 app
-  .use('/api', greetings)
+  .use('/api', greetingsRouter);
 
 app.listen(port, () => {
-    console.log(`App listening at http://localhost:${port}`)
-})
+  console.log(`App listening at http://localhost:${port}`);
+});
