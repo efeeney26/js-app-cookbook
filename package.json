@@ -5,12 +5,12 @@
   "scripts": {
     "start": "run-p start:*",
     "start:serve": "webpack serve",
+    "storybook": "start-storybook -p 6006",
     "start:stub": "tsnd stub",
+    "build-storybook": "build-storybook",
     "build": "webpack --node-env production",
     "eslint": "npx eslint --ext .ts,.tsx,.js .",
-    "eslint:fix": "npx eslint --ext .ts,.tsx . --fix",
-    "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
+    "eslint:fix": "npx eslint --ext .ts,.tsx . --fix"
   },
   "repository": {
     "type": "git",
