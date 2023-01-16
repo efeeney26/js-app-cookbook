@@ -1,0 +1,44 @@
+import { Meta } from '@storybook/addon-docs';
+
+<Meta title="Учебник/Основы JavaScript/Конструкция 'switch'" />
+
+[Напишите "if", аналогичный "switch"](https://learn.javascript.ru/task/rewrite-switch-if-else)
+
+```ts
+const browser = prompt('Browser');
+if (browser === 'Edge') {
+    alert('You\'ve got the Edge!');
+  } else if (
+    browser === 'Chrome'
+    || browser === 'Firefox'
+    || browser === 'Safari'
+    || browser === 'Opera'
+  ) {
+    alert('Okay we support these browsers too');
+  } else {
+    alert('We hope that this page looks ok!');
+}
+```
+
+[Переписать условия "if" на "switch"](https://learn.javascript.ru/task/rewrite-if-switch)
+
+```ts
+let number: string | number | null = prompt('Введите число между 0 и 3', '');
+  if (number) {
+    number = +number;
+    switch (number) {
+      case 0:
+        console.info('Вы ввели число 0');
+        return;
+      case 1:
+        console.info('Вы ввели число 1');
+        return;
+      case 2:
+      case 3:
+        console.info('Вы ввели число 2, а может и 3');
+        return;
+      default:
+        console.info('Вы ничего не ввели');
+    }
+  }
+```
