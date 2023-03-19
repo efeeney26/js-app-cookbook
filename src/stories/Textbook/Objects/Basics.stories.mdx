@@ -1,0 +1,43 @@
+import { Meta } from '@storybook/addon-docs';
+import { playground } from "../playground";
+playground()
+
+<Meta title="Учебник/Объекты/Основы" />
+
+[Проверка на пустоту](https://learn.javascript.ru/task/is-empty)
+```ts
+const isEmpty = (obj: Record<string, unknown>): boolean => {
+    let result = false;
+    for (const objKey in obj) {
+      if (objKey) {
+        result = true;
+        break;
+      }
+    }
+    return result;
+};
+```
+
+[Сумма свойств объекта](https://learn.javascript.ru/task/sum-object)
+```ts
+const sum = (obj: Record<string, number>) => {
+    let result = 0;
+    for (const objKey in obj) {
+      result += obj[objKey];
+    }
+    return result;
+  };
+```
+
+[Умножаем все числовые свойства на 2](https://learn.javascript.ru/task/multiply-numeric)
+```ts
+const multiplyNumeric = (obj: Record<string, unknown>) => {
+    for (const objKey in obj) {
+      if (typeof obj[objKey] === 'number') {
+        (obj[objKey] as number) *= 2;
+      }
+    }
+    return obj;
+  };
+```
+
