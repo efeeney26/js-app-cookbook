@@ -1,0 +1,27 @@
+import { Meta } from '@storybook/addon-docs';
+
+<Meta title="Учебник/Основы JavaScript/Функции" />
+
+[Перепишите функцию, используя оператор '?' или '||'](https://learn.javascript.ru/task/rewrite-function-question-or)
+
+#### Вариант 1
+
+```ts
+export const checkAge = (age: number): boolean => age > 18 ? true : confirm('Родители разрешили?');
+```
+
+#### Вариант 2
+
+```ts
+export const checkAge = (age: number): boolean => age > 18 || confirm('Родители разрешили?');
+```
+
+[Функция min(a, b)](https://learn.javascript.ru/task/min)
+```ts
+const min = (a: number, b: number) => (a < b ? a : b);
+```
+
+[Функция pow(x,n)](https://learn.javascript.ru/task/pow)
+```ts
+const pow = (x: number, n: number) => x ** n;
+```
