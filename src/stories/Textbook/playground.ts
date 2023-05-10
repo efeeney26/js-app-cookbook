@@ -1,2 +1,1 @@
-export const playground = () => {
-};
+export const playground = () => {};

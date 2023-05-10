@@ -1,0 +1,44 @@
+import { Meta } from '@storybook/addon-docs';
+
+<Meta title="Учебник/Типы данных/Числа" />
+
+[Сумма пользовательских чисел](https://learn.javascript.ru/task/sum-interface)
+
+```ts
+const firstNumber = prompt('Введите 1-е число');
+const secondNumber = prompt('Введите 2-е число');
+
+if (firstNumber && secondNumber) {
+    console.info(+firstNumber + +secondNumber);
+}
+```
+
+[Ввод числового значения](https://learn.javascript.ru/task/repeat-until-number)
+
+```ts
+const readNumber = (): null | number => {
+    const number = prompt('Введите число');
+    if (!number) {
+      return null;
+    }
+    if (Number.isFinite(+number)) {
+      return +number;
+    }
+    return readNumber();
+};
+```
+
+[Случайное число от min до max](https://learn.javascript.ru/task/random-min-max)
+
+```ts
+const random = (min: number, max: number) => min + Math.random() * (max - min);
+```
+
+[Случайное целое число от min до max](https://learn.javascript.ru/task/random-int-min-max)
+
+```ts
+const randomInteger = (
+    min: number,
+    max: number,
+  ) => Math.floor(min + Math.random() * (max + 1 - min));
+```
