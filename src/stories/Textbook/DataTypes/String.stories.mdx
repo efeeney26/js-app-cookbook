@@ -1,0 +1,44 @@
+import { Meta } from '@storybook/addon-docs';
+
+<Meta title="Учебник/Типы данных/Строки" />
+
+[Сделать первый символ заглавным](https://learn.javascript.ru/task/ucfirst)
+
+```ts
+const ucFirst = (str: string) => {
+    const [first, ...rest] = str;
+    return `${first.toUpperCase()}${rest.join('')}`;
+};
+```
+
+[Проверка на спам](https://learn.javascript.ru/task/check-spam)
+
+```ts
+const checkSpam = (str: string) => {
+    const lowerStr = str.toLowerCase();
+    return lowerStr.includes('viagra') || lowerStr.includes('xxx');
+};
+```
+
+[Усечение строки](https://learn.javascript.ru/task/truncate)
+```ts
+const truncate = (str: string, maxlength: number) => {
+    let newStr = '';
+    for (let i = 0; i < str.length; i++) {
+      if (i >= maxlength - 1) {
+        newStr += '...';
+        break;
+      }
+      newStr += str[i];
+    }
+    return newStr;
+};
+```
+
+[Выделить число](https://learn.javascript.ru/task/extract-currency)
+```ts
+const extractCurrencyValue = (str: string) => {
+    const [val, ...rest] = str;
+    return +rest.join('');
+};
+```
