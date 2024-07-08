@@ -6,6 +6,7 @@
     "start": "run-p start:*",
     "start:serve": "webpack serve",
     "storybook": "start-storybook -p 6006",
+    "storybook:https": "start-storybook -p 6006 --https --ssl-cert certs/cert.pem --ssl-key certs/key.pem",
     "start:stub": "tsnd stub",
     "build-storybook": "build-storybook",
     "build": "webpack --node-env production",
