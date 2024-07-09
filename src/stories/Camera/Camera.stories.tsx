@@ -22,7 +22,7 @@ export const StoryComponent: FC = () => {
       video: {
         facingMode: 'environment',
         width: { ideal: 1920 },
-        height: { ideal: 1280 },
+        height: { ideal: 1080 },
       },
     });
 
