@@ -28,24 +28,13 @@ export const StoryComponent: FC = () => {
 
     const videoTrack = cameraStream.getVideoTracks()[0];
     const videoTrackCapabilities = videoTrack.getCapabilities();
-    const videoTrackSettings = videoTrack.getSettings();
-    if ((videoTrackCapabilities.width?.max ?? 0) > (videoTrackSettings.width ?? 0)) {
-      try {
-        await videoTrack.applyConstraints({
-          width: videoTrackCapabilities.width?.max,
-        });
-      } catch (e) {
-        console.error(e);
-      }
-    }
-    if ((videoTrackCapabilities.height?.max ?? 0) > (videoTrackSettings?.height ?? 0)) {
-      try {
-        await videoTrack.applyConstraints({
-          height: videoTrackCapabilities.height?.max,
-        });
-      } catch (e) {
-        console.error(e);
-      }
+    try {
+      await videoTrack.applyConstraints({
+        width: { ideal: videoTrackCapabilities.width?.max },
+        height: { ideal: videoTrackCapabilities.height?.max },
+      });
+    } catch (e) {
+      console.error(e);
     }
 
     if (videoElement.current) {
