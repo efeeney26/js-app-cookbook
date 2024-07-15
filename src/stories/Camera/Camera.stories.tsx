@@ -8,8 +8,9 @@ import Typography from '@mui/material/Typography';
 import Alert from '@mui/material/Alert';
 import { Camera } from './models';
 import { Camera as CameraComponent } from './components/Camera';
+import { Constraints } from './models/types';
 
-export const StoryComponent: FC = () => {
+export const StoryComponent: FC<Constraints> = ({ cameraWidth, cameraHeight }) => {
   const videoElementRef = useRef<HTMLVideoElement | null>(null);
   const cameraRef = useRef<Camera | null>(null);
 
@@ -40,7 +41,10 @@ export const StoryComponent: FC = () => {
 
     if (isCameraInit) {
       try {
-        await cameraRef.current?.startCamera();
+        await cameraRef.current?.startCamera({
+          cameraWidth,
+          cameraHeight,
+        });
 
         setIsCameraStarted(true);
       } catch (errorStart) {
@@ -48,7 +52,7 @@ export const StoryComponent: FC = () => {
         setIsCameraStarted(false);
       }
     }
-  }, [isCameraInit]);
+  }, [cameraHeight, cameraWidth, isCameraInit]);
 
   const handleStopCamera = useCallback(() => {
     cameraRef.current?.stopCamera();
@@ -140,4 +144,8 @@ export const StoryComponent: FC = () => {
 
 export default {
   component: StoryComponent,
+  args: {
+    cameraWidth: undefined,
+    cameraHeight: undefined,
+  },
 } as ComponentMeta<typeof StoryComponent>;
