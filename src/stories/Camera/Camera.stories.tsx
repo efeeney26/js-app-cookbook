@@ -162,6 +162,7 @@ export const StoryComponent: FC<Constraints> = ({ cameraWidth, cameraHeight }) =
             <br />
             <br />
             <Typography>Камера:</Typography>
+            <Typography>{`Переданные ограничения: ${videoConstraints}`}</Typography>
             <Typography>{`Возможности: ${videoCapabilities}`}</Typography>
             <br />
             <Typography>{`Настройки: ${videoSetting}`}</Typography>
