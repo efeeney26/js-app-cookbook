@@ -1,95 +1,82 @@
 import React, {
-  FC, LegacyRef, useCallback, useRef, useState,
+  FC, useCallback, useEffect, useRef, useState,
 } from 'react';
 import { type ComponentMeta } from '@storybook/react';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
-import styled from '@emotion/styled';
-
-const VideoStyled = styled.video({
-  objectFit: 'cover',
-});
+import Typography from '@mui/material/Typography';
+import Alert from '@mui/material/Alert';
+import { Camera } from './models';
+import { Camera as CameraComponent } from './components/Camera';
 
 export const StoryComponent: FC = () => {
-  const videoElement = useRef<HTMLVideoElement | null>(null);
+  const videoElementRef = useRef<HTMLVideoElement | null>(null);
+  const cameraRef = useRef<Camera | null>(null);
 
-  const [img, setImg] = useState('');
+  const [error, setError] = useState<string>();
+  const [frameBlob, setFrameBlob] = useState<Blob>();
+  const [isCameraInit, setIsCameraInit] = useState(false);
+  const [isCameraStarted, setIsCameraStarted] = useState(false);
+  const [isCameraPaused, setIsCameraPaused] = useState(false);
+
+  const initCamera = useCallback(() => {
+    if (videoElementRef.current) {
+      cameraRef.current = new Camera({
+        videoElement: videoElementRef.current,
+      });
+      setIsCameraInit(true);
+    } else {
+      setError('Видеоэлемент не проинициализирован');
+    }
+  }, []);
+
+  useEffect(() => {
+    initCamera();
+  }, [initCamera]);
 
   const handleStartCamera = useCallback(async () => {
-    setImg('');
-    const cameraStream = await navigator.mediaDevices.getUserMedia({
-      audio: false,
-      video: {
-        facingMode: 'environment',
-        width: { ideal: 1920 },
-        height: { ideal: 1080 },
-      },
-    });
+    setFrameBlob(undefined);
+    setError(undefined);
 
-    const videoTrack = cameraStream.getVideoTracks()[0];
-    const videoTrackCapabilities = videoTrack.getCapabilities();
-    try {
-      await videoTrack.applyConstraints({
-        width: { ideal: videoTrackCapabilities.width?.max },
-        height: { ideal: videoTrackCapabilities.height?.max },
-      });
-    } catch (e) {
-      console.error(e);
-    }
+    if (isCameraInit) {
+      try {
+        await cameraRef.current?.startCamera();
 
-    if (videoElement.current) {
-      Object.assign(videoElement.current, {
-        srcObject: cameraStream,
-      });
-
-      await videoElement.current?.play();
-    }
-  }, []);
-
-  const handleStopCamera = useCallback(() => {
-    if (videoElement.current) {
-      const { srcObject: stream } = videoElement.current;
-      if (stream) {
-        (stream as MediaStream).getTracks().forEach((track) => {
-          track.stop();
-        });
-
-        Object.assign(videoElement.current, {
-          srcObject: null,
-        });
+        setIsCameraStarted(true);
+      } catch (errorStart) {
+        setError((errorStart as Error).message);
+        setIsCameraStarted(false);
       }
     }
+  }, [isCameraInit]);
+
+  const handleStopCamera = useCallback(() => {
+    cameraRef.current?.stopCamera();
+    setIsCameraStarted(false);
   }, []);
 
-  const handlePhoto = useCallback(async () => {
-    if (videoElement.current) {
-      const canvas = document.createElement('canvas');
+  const handleGetFrame = useCallback(async () => {
+    const frame = cameraRef.current?.getFrame();
 
-      const {
-        videoWidth,
-        videoHeight,
-      } = videoElement.current;
-
-      canvas.width = videoElement.current?.videoWidth;
-      canvas.height = videoElement.current?.videoHeight;
-
-      const context = canvas.getContext('2d', { alpha: false });
-      context?.drawImage(
-        videoElement.current,
-        0,
-        0,
-        videoWidth,
-        videoHeight,
-      );
-
-      canvas.toBlob((blob) => {
+    if (frame) {
+      frame.toBlob((blob) => {
         if (blob) {
           handleStopCamera();
-          setImg(URL.createObjectURL(blob));
+          setFrameBlob(blob);
         }
       });
     }
   }, [handleStopCamera]);
+
+  const handlePause = useCallback(() => {
+    cameraRef?.current?.pauseCamera();
+    setIsCameraPaused(true);
+  }, []);
+
+  const handleResume = useCallback(async () => {
+    await cameraRef.current?.resumeCamera();
+    setIsCameraPaused(false);
+  }, []);
 
   return (
     <>
@@ -97,13 +84,29 @@ export const StoryComponent: FC = () => {
         display="flex"
         alignItems="center"
       >
-        <Button variant="contained" onClick={handleStartCamera}>Старт камеры</Button>
-        <Box marginLeft={16}>
-          <Button variant="outlined" onClick={handleStopCamera}>Стоп камеры</Button>
-        </Box>
-        <Box marginLeft={16}>
-          <Button variant="outlined" onClick={handlePhoto}>Сделать снимок</Button>
-        </Box>
+        {isCameraStarted
+          ? (
+            <>
+              <Button variant="outlined" onClick={handleStopCamera}>Стоп камеры</Button>
+              <Box marginLeft={16}>
+                <Button variant="outlined" onClick={handleGetFrame}>Сделать снимок</Button>
+              </Box>
+              <Box marginLeft={16}>
+                <Button variant="outlined" onClick={handlePause}>Пауза</Button>
+              </Box>
+              {
+                isCameraPaused
+                && (
+                <Box marginLeft={16}>
+                  <Button variant="outlined" onClick={handleResume}>Возобновить</Button>
+                </Box>
+                )
+              }
+            </>
+          )
+          : (
+            <Button variant="contained" onClick={handleStartCamera}>Старт камеры</Button>
+          )}
       </Box>
       <Box
         zIndex={-1}
@@ -113,21 +116,23 @@ export const StoryComponent: FC = () => {
         top={0}
         left={0}
       >
-        <VideoStyled
-          autoPlay
-          muted
-          playsInline
-          ref={videoElement as LegacyRef<HTMLVideoElement>}
-          width="100%"
-          height="100%"
+        <CameraComponent
+          ref={videoElementRef}
         />
       </Box>
-      {img
+      {error
         && (
-        <img
-          src={img}
-          alt="img"
-        />
+        <Alert severity="error">{error}</Alert>
+        )}
+      {frameBlob
+        && (
+          <>
+            <Typography>{ `Размер фото: ${frameBlob.size / 1e6} Мб`}</Typography>
+            <img
+              src={URL.createObjectURL(frameBlob)}
+              alt="img"
+            />
+          </>
         )}
     </>
   );
