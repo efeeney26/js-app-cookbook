@@ -49,7 +49,7 @@ export class Camera {
     }
   }
 
-  public getFrame(): HTMLCanvasElement | null {
+  public getFrameCanvas(): HTMLCanvasElement | null {
     if (this.videoElement.readyState === this.videoElement.HAVE_ENOUGH_DATA) {
       const {
         videoWidth,
@@ -91,6 +91,9 @@ export class Camera {
         width: { ideal: constraints.cameraWidth },
         height: { ideal: constraints.cameraHeight },
       });
+      console.info('constraints', constraints);
+      console.info('capabilities', videoTrack?.getCapabilities());
+      console.info('setting', videoTrack?.getSettings());
     } catch (error) {
       console.error('error', error);
     }

@@ -15,6 +15,7 @@ export const StoryComponent: FC<Constraints> = ({ cameraWidth, cameraHeight }) =
   const cameraRef = useRef<Camera | null>(null);
 
   const [error, setError] = useState<string>();
+  const [frameCanvasData, setFrameCanvasData] = useState<{ width: number, height: number }>();
   const [frameBlob, setFrameBlob] = useState<Blob>();
   const [isCameraInit, setIsCameraInit] = useState(false);
   const [isCameraStarted, setIsCameraStarted] = useState(false);
@@ -60,10 +61,14 @@ export const StoryComponent: FC<Constraints> = ({ cameraWidth, cameraHeight }) =
   }, []);
 
   const handleGetFrame = useCallback(async () => {
-    const frame = cameraRef.current?.getFrame();
+    const frameCanvas = cameraRef.current?.getFrameCanvas();
 
-    if (frame) {
-      frame.toBlob((blob) => {
+    if (frameCanvas) {
+      setFrameCanvasData({
+        width: frameCanvas.width,
+        height: frameCanvas.height,
+      });
+      frameCanvas.toBlob((blob) => {
         if (blob) {
           handleStopCamera();
           setFrameBlob(blob);
@@ -128,10 +133,12 @@ export const StoryComponent: FC<Constraints> = ({ cameraWidth, cameraHeight }) =
         && (
         <Alert severity="error">{error}</Alert>
         )}
-      {frameBlob
+      {frameBlob && frameCanvasData
         && (
           <>
             <Typography>{ `Размер фото: ${frameBlob.size / 1e6} Мб`}</Typography>
+            <Typography>{ `Ширина: ${frameCanvasData?.width}`}</Typography>
+            <Typography>{ `Высота: ${frameCanvasData?.height}`}</Typography>
             <img
               src={URL.createObjectURL(frameBlob)}
               alt="img"
