@@ -6,9 +6,6 @@ type CameraProps = ComponentPropsWithoutRef<'video'>;
 
 export const Camera = forwardRef<HTMLVideoElement, CameraProps>((props, ref) => (
   <VideoStyled
-    autoPlay
-    muted
-    playsInline
     ref={ref}
     {...props}
   />

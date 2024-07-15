@@ -14,9 +14,17 @@ export const StoryComponent: FC<Constraints> = ({ cameraWidth, cameraHeight }) =
   const videoElementRef = useRef<HTMLVideoElement | null>(null);
   const cameraRef = useRef<Camera | null>(null);
 
-  const [error, setError] = useState<string>();
+  // фото
   const [frameCanvasData, setFrameCanvasData] = useState<{ width: number, height: number }>();
   const [frameBlob, setFrameBlob] = useState<Blob>();
+
+  // видео
+  const [videoConstraints, setVideoConstraints] = useState<string>();
+  const [videoSetting, setVideoSettings] = useState<string>();
+  const [videoCapabilities, setVideoCapabilities] = useState<string>();
+
+  const [error, setError] = useState<string>();
+
   const [isCameraInit, setIsCameraInit] = useState(false);
   const [isCameraStarted, setIsCameraStarted] = useState(false);
   const [isCameraPaused, setIsCameraPaused] = useState(false);
@@ -35,6 +43,13 @@ export const StoryComponent: FC<Constraints> = ({ cameraWidth, cameraHeight }) =
   useEffect(() => {
     initCamera();
   }, [initCamera]);
+
+  useEffect(() => {
+    setVideoConstraints(JSON.stringify({
+      cameraWidth,
+      cameraHeight,
+    }));
+  }, [cameraHeight, cameraWidth]);
 
   const handleStartCamera = useCallback(async () => {
     setFrameBlob(undefined);
@@ -61,6 +76,10 @@ export const StoryComponent: FC<Constraints> = ({ cameraWidth, cameraHeight }) =
   }, []);
 
   const handleGetFrame = useCallback(async () => {
+    const videoTrack = (videoElementRef.current?.srcObject as MediaStream)?.getVideoTracks()[0];
+    setVideoSettings(JSON.stringify(videoTrack.getSettings()));
+    setVideoCapabilities(JSON.stringify(videoTrack.getCapabilities()));
+
     const frameCanvas = cameraRef.current?.getFrameCanvas();
 
     if (frameCanvas) {
@@ -136,9 +155,16 @@ export const StoryComponent: FC<Constraints> = ({ cameraWidth, cameraHeight }) =
       {frameBlob && frameCanvasData
         && (
           <>
-            <Typography>{ `Размер фото: ${frameBlob.size / 1e6} Мб`}</Typography>
+            <Typography>Фото:</Typography>
+            <Typography>{ `Размер: ${frameBlob.size / 1e6} Мб`}</Typography>
             <Typography>{ `Ширина: ${frameCanvasData?.width}`}</Typography>
             <Typography>{ `Высота: ${frameCanvasData?.height}`}</Typography>
+            <br />
+            <br />
+            <Typography>Камера:</Typography>
+            <Typography>{`Возможности: ${videoCapabilities}`}</Typography>
+            <br />
+            <Typography>{`Настройки: ${videoSetting}`}</Typography>
             <img
               src={URL.createObjectURL(frameBlob)}
               alt="img"
