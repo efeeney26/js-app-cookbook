@@ -165,29 +165,19 @@ export default {
       control: {
         type: 'object',
         value: {
+          deviceId: {
+            exact: undefined,
+            ideal: undefined,
+          },
+          groupId: {
+            exact: undefined,
+            ideal: undefined,
+          },
           aspectRatio: {
             exact: undefined,
             ideal: undefined,
             min: undefined,
             max: undefined,
-          },
-          autoGainControl: {
-            exact: undefined,
-            ideal: undefined,
-          },
-          channelCount: {
-            exact: undefined,
-            ideal: undefined,
-            min: undefined,
-            max: undefined,
-          },
-          deviceId: {
-            exact: undefined,
-            ideal: undefined,
-          },
-          echoCancellation: {
-            exact: undefined,
-            ideal: undefined,
           },
           facingMode: {
             exact: undefined,
@@ -199,47 +189,21 @@ export default {
             min: undefined,
             max: undefined,
           },
-          groupId: {
-            exact: undefined,
-            ideal: undefined,
-          },
           height: {
             exact: undefined,
             ideal: undefined,
             min: undefined,
             max: undefined,
           },
-          latency: {
-            exact: undefined,
-            ideal: undefined,
-            min: undefined,
-            max: undefined,
-          },
-          noiseSuppression: {
-            exact: undefined,
-            ideal: undefined,
-          },
-          sampleRate: {
-            exact: undefined,
-            ideal: undefined,
-            min: undefined,
-            max: undefined,
-          },
-          sampleSize: {
-            exact: undefined,
-            ideal: undefined,
-            min: undefined,
-            max: undefined,
-          },
-          suppressLocalAudioPlayback: {
-            exact: undefined,
-            ideal: undefined,
-          },
           width: {
             exact: undefined,
             ideal: undefined,
             min: undefined,
             max: undefined,
+          },
+          resizeMode: {
+            exact: undefined,
+            ideal: undefined,
           },
         },
       },
