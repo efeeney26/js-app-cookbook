@@ -218,8 +218,6 @@ export default {
           noiseSuppression: {
             exact: undefined,
             ideal: undefined,
-            min: undefined,
-            max: undefined,
           },
           sampleRate: {
             exact: undefined,
