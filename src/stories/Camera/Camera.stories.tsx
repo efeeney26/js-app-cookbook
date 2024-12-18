@@ -6,13 +6,33 @@ import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Alert from '@mui/material/Alert';
-import { Camera } from './models';
 import { Camera as CameraComponent } from './components/Camera';
-import { Constraints } from './models/types';
+import { useCamera } from './hooks/useCamera';
 
-export const StoryComponent: FC<Constraints> = ({ cameraWidth, cameraHeight }) => {
+interface StoryComponentProps {
+  mediaTrackConstraints?: MediaTrackConstraints;
+  canvasRenderingContext2DSettings?: CanvasRenderingContext2DSettings;
+}
+
+export const StoryComponent: FC<StoryComponentProps> = ({
+  mediaTrackConstraints,
+  canvasRenderingContext2DSettings,
+}) => {
   const videoElementRef = useRef<HTMLVideoElement | null>(null);
-  const cameraRef = useRef<Camera | null>(null);
+
+  const {
+    isCameraInit,
+    isCameraStarted,
+    isCameraPaused,
+    startCamera,
+    resumeCamera,
+    pauseCamera,
+    getFrameCanvas,
+    stopCamera,
+    error,
+    getCameraSettings,
+    getCameraCapabilities,
+  } = useCamera(videoElementRef);
 
   // фото
   const [frameCanvasData, setFrameCanvasData] = useState<{ width: number, height: number }>();
@@ -23,65 +43,25 @@ export const StoryComponent: FC<Constraints> = ({ cameraWidth, cameraHeight }) =
   const [videoSetting, setVideoSettings] = useState<string>();
   const [videoCapabilities, setVideoCapabilities] = useState<string>();
 
-  const [error, setError] = useState<string>();
-
-  const [isCameraInit, setIsCameraInit] = useState(false);
-  const [isCameraStarted, setIsCameraStarted] = useState(false);
-  const [isCameraPaused, setIsCameraPaused] = useState(false);
-
-  const initCamera = useCallback(() => {
-    if (videoElementRef.current) {
-      cameraRef.current = new Camera({
-        videoElement: videoElementRef.current,
-      });
-      setIsCameraInit(true);
-    } else {
-      setError('Видеоэлемент не проинициализирован');
-    }
-  }, []);
-
-  useEffect(() => {
-    initCamera();
-  }, [initCamera]);
-
   useEffect(() => {
     if (isCameraStarted) {
-      setVideoConstraints(JSON.stringify({
-        cameraWidth,
-        cameraHeight,
-      }));
-      const videoTrack = (videoElementRef.current?.srcObject as MediaStream)?.getVideoTracks()[0];
-      setVideoSettings(JSON.stringify(videoTrack.getSettings()));
-      setVideoCapabilities(JSON.stringify(videoTrack.getCapabilities()));
+      setVideoConstraints(JSON.stringify(mediaTrackConstraints, null, '\t'));
+      setVideoSettings(JSON.stringify(getCameraSettings(), null, '\t'));
+      setVideoCapabilities(JSON.stringify(getCameraCapabilities(), null, '\t'));
     }
-  }, [cameraHeight, cameraWidth, isCameraStarted]);
+  }, [getCameraCapabilities, getCameraSettings, isCameraStarted, mediaTrackConstraints]);
 
   const handleStartCamera = useCallback(async () => {
     setFrameBlob(undefined);
-    setError(undefined);
+    setFrameCanvasData(undefined);
 
     if (isCameraInit) {
-      try {
-        await cameraRef.current?.startCamera({
-          cameraWidth,
-          cameraHeight,
-        });
-
-        setIsCameraStarted(true);
-      } catch (errorStart) {
-        setError((errorStart as Error).message);
-        setIsCameraStarted(false);
-      }
+      await startCamera(mediaTrackConstraints);
     }
-  }, [cameraHeight, cameraWidth, isCameraInit]);
+  }, [isCameraInit, mediaTrackConstraints, startCamera]);
 
-  const handleStopCamera = useCallback(() => {
-    cameraRef.current?.stopCamera();
-    setIsCameraStarted(false);
-  }, []);
-
-  const handleGetFrame = useCallback(async () => {
-    const frameCanvas = cameraRef.current?.getFrameCanvas();
+  const handleGetFrameCanvas = useCallback(async () => {
+    const frameCanvas = getFrameCanvas(canvasRenderingContext2DSettings);
 
     if (frameCanvas) {
       setFrameCanvasData({
@@ -90,22 +70,16 @@ export const StoryComponent: FC<Constraints> = ({ cameraWidth, cameraHeight }) =
       });
       frameCanvas.toBlob((blob) => {
         if (blob) {
-          handleStopCamera();
+          stopCamera();
           setFrameBlob(blob);
         }
       });
     }
-  }, [handleStopCamera]);
+  }, [canvasRenderingContext2DSettings, getFrameCanvas, stopCamera]);
 
-  const handlePause = useCallback(() => {
-    cameraRef?.current?.pauseCamera();
-    setIsCameraPaused(true);
-  }, []);
-
-  const handleResume = useCallback(async () => {
-    await cameraRef.current?.resumeCamera();
-    setIsCameraPaused(false);
-  }, []);
+  useEffect(() => () => {
+    stopCamera();
+  }, [stopCamera]);
 
   return (
     <>
@@ -114,29 +88,60 @@ export const StoryComponent: FC<Constraints> = ({ cameraWidth, cameraHeight }) =
         alignItems="center"
       >
         {isCameraStarted
-          ? (
+          && (
             <>
-              <Button variant="outlined" onClick={handleStopCamera}>Стоп камеры</Button>
+              <Button variant="outlined" onClick={stopCamera}>Стоп камеры</Button>
               <Box marginLeft={16}>
-                <Button variant="outlined" onClick={handleGetFrame}>Сделать снимок</Button>
+                <Button variant="outlined" onClick={handleGetFrameCanvas}>Сделать снимок</Button>
               </Box>
               <Box marginLeft={16}>
-                <Button variant="outlined" onClick={handlePause}>Пауза</Button>
+                <Button variant="outlined" onClick={pauseCamera}>Пауза</Button>
               </Box>
               {
                 isCameraPaused
                 && (
                 <Box marginLeft={16}>
-                  <Button variant="outlined" onClick={handleResume}>Возобновить</Button>
+                  <Button variant="outlined" onClick={resumeCamera}>Возобновить</Button>
                 </Box>
                 )
               }
             </>
-          )
-          : (
-            <Button variant="contained" onClick={handleStartCamera}>Старт камеры</Button>
           )}
       </Box>
+      {!isCameraStarted && (
+        <>
+          <Button variant="contained" onClick={handleStartCamera}>Старт камеры</Button>
+          {videoCapabilities && videoSetting
+            && (
+              <>
+                <Typography>Камера:</Typography>
+                <Typography>{`Переданные ограничения: ${videoConstraints ?? 'Не переданы'}`}</Typography>
+                <Typography>{`Возможности: ${videoCapabilities}`}</Typography>
+                <Typography>{`Конечные настройки: ${videoSetting}`}</Typography>
+                <br />
+                <br />
+              </>
+            )}
+          {frameBlob && frameCanvasData
+            && (
+              <>
+                <Typography>Фото:</Typography>
+                <Typography>{ `Размер: ${frameBlob.size / 1e6} Мб`}</Typography>
+                <Typography>{ `Расширение: ${frameBlob.type}`}</Typography>
+                <Typography>{ `Ширина: ${frameCanvasData?.width}`}</Typography>
+                <Typography>{ `Высота: ${frameCanvasData?.height}`}</Typography>
+                <img
+                  src={URL.createObjectURL(frameBlob)}
+                  alt="img"
+                />
+              </>
+            )}
+          {error
+            && (
+              <Alert severity="error">{error}</Alert>
+            )}
+        </>
+      )}
       <Box
         zIndex={-1}
         width="100%"
@@ -149,43 +154,10 @@ export const StoryComponent: FC<Constraints> = ({ cameraWidth, cameraHeight }) =
           ref={videoElementRef}
         />
       </Box>
-      {error
-        && (
-        <Alert severity="error">{error}</Alert>
-        )}
-      {videoConstraints && videoCapabilities && videoSetting && !isCameraStarted
-        && (
-        <>
-          <Typography>Камера:</Typography>
-          <Typography>{`Переданные ограничения: ${videoConstraints}`}</Typography>
-          <Typography>{`Возможности: ${videoCapabilities}`}</Typography>
-          <Typography>{`Конечные настройки: ${videoSetting}`}</Typography>
-          <br />
-          <br />
-        </>
-        )}
-      {frameBlob && frameCanvasData && !isCameraStarted
-        && (
-          <>
-            <Typography>Фото:</Typography>
-            <Typography>{ `Размер: ${frameBlob.size / 1e6} Мб`}</Typography>
-            <Typography>{ `Расширение: ${frameBlob.type}`}</Typography>
-            <Typography>{ `Ширина: ${frameCanvasData?.width}`}</Typography>
-            <Typography>{ `Высота: ${frameCanvasData?.height}`}</Typography>
-            <img
-              src={URL.createObjectURL(frameBlob)}
-              alt="img"
-            />
-          </>
-        )}
     </>
   );
 };
 
 export default {
   component: StoryComponent,
-  args: {
-    cameraWidth: undefined,
-    cameraHeight: undefined,
-  },
 } as ComponentMeta<typeof StoryComponent>;

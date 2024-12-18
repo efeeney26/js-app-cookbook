@@ -36,6 +36,8 @@ module.exports = {
     'space-before-blocks': 'off',
     '@typescript-eslint/space-before-blocks': 'off',
     'no-plusplus': 'off',
-    'import/no-extraneous-dependencies': 'off'
+    'import/no-extraneous-dependencies': 'off',
+    '@typescript-eslint/no-shadow': 'off',
+    'no-void': 'off',
   },
 };
