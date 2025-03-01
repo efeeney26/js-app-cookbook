@@ -8,6 +8,7 @@ import Typography from '@mui/material/Typography';
 import Alert from '@mui/material/Alert';
 import { Camera as CameraComponent } from './components/Camera';
 import { useCamera } from './hooks/useCamera';
+import { main } from '../../models/GigaChat';
 
 interface StoryComponentProps {
   mediaTrackConstraints?: MediaTrackConstraints;
@@ -50,6 +51,10 @@ export const StoryComponent: FC<StoryComponentProps> = ({
       setVideoCapabilities(JSON.stringify(getCameraCapabilities(), null, '\t'));
     }
   }, [getCameraCapabilities, getCameraSettings, isCameraStarted, mediaTrackConstraints]);
+
+  useEffect(() => {
+    void main();
+  }, []);
 
   const handleStartCamera = useCallback(async () => {
     setFrameBlob(undefined);

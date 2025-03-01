@@ -11,5 +11,13 @@ module.exports = {
   "framework": "@storybook/react",
   "core": {
     "builder": "@storybook/builder-webpack5"
+  },
+  webpackFinal: (config) => {
+    config.resolve.fallback = {
+      ...config.resolve.fallback,
+      'os': false
+    }
+
+    return config
   }
 }
