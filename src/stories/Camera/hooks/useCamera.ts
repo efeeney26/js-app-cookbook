@@ -2,7 +2,7 @@ import {
   MutableRefObject,
   useCallback, useEffect, useRef, useState,
 } from 'react';
-import { Camera } from '../models';
+import { Camera } from '../models/Camera';
 
 export const useCamera = (videoElementRef: MutableRefObject<HTMLVideoElement | null>) => {
   const cameraRef = useRef<Camera | null>(null);

@@ -6,9 +6,10 @@ import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Alert from '@mui/material/Alert';
+import axios from 'axios';
 import { Camera as CameraComponent } from './components/Camera';
 import { useCamera } from './hooks/useCamera';
-import { main } from '../../models/GigaChat';
+// import { main } from './models/GigaChat';
 
 interface StoryComponentProps {
   mediaTrackConstraints?: MediaTrackConstraints;
@@ -44,6 +45,8 @@ export const StoryComponent: FC<StoryComponentProps> = ({
   const [videoSetting, setVideoSettings] = useState<string>();
   const [videoCapabilities, setVideoCapabilities] = useState<string>();
 
+  const [gigaResponse, setGigaResponse] = useState<string>();
+
   useEffect(() => {
     if (isCameraStarted) {
       setVideoConstraints(JSON.stringify(mediaTrackConstraints, null, '\t'));
@@ -53,8 +56,22 @@ export const StoryComponent: FC<StoryComponentProps> = ({
   }, [getCameraCapabilities, getCameraSettings, isCameraStarted, mediaTrackConstraints]);
 
   useEffect(() => {
-    void main();
+    // не работает в браузере из-за того, что при авторизации не обрабатывается метод OPTIONS
+    // void main();
   }, []);
+
+  const handleGigaResponse = useCallback(async () => {
+    try {
+      const response = await axios.get<Record<string, string>>('http://localhost:8080/api/giga');
+      setGigaResponse(response.data.gigaResponse);
+    } catch {
+      // ignore
+    }
+  }, []);
+
+  useEffect(() => {
+    void handleGigaResponse();
+  }, [handleGigaResponse]);
 
   const handleStartCamera = useCallback(async () => {
     setFrameBlob(undefined);
@@ -145,6 +162,8 @@ export const StoryComponent: FC<StoryComponentProps> = ({
             && (
               <Alert severity="error">{error}</Alert>
             )}
+          {gigaResponse
+            && <Typography>{gigaResponse}</Typography>}
         </>
       )}
       <Box
