@@ -45,7 +45,7 @@ export const StoryComponent: FC<StoryComponentProps> = ({
   const [videoSetting, setVideoSettings] = useState<string>();
   const [videoCapabilities, setVideoCapabilities] = useState<string>();
 
-  const [gigaResponse, setGigaResponse] = useState<string>();
+  const [frameCheck, setFrameCheck] = useState<string>();
 
   useEffect(() => {
     if (isCameraStarted) {
@@ -60,22 +60,32 @@ export const StoryComponent: FC<StoryComponentProps> = ({
     // void main();
   }, []);
 
-  const handleGigaResponse = useCallback(async () => {
+  const handleCheckFrame = useCallback(async (photo: Blob) => {
+    const formData = new FormData();
+    formData.append('photo', photo);
     try {
-      const response = await axios.get<Record<string, string>>('http://localhost:8080/api/giga');
-      setGigaResponse(response.data.gigaResponse);
-    } catch {
+      const response = await axios.post<Record<string, string>>(
+        'http://localhost:8080/api/giga',
+        formData,
+
+      );
+      setFrameCheck(response.data.gigaResponse);
+    } catch (error) {
+      console.error(error);
       // ignore
     }
   }, []);
 
   useEffect(() => {
-    void handleGigaResponse();
-  }, [handleGigaResponse]);
+    if (frameBlob) {
+      void handleCheckFrame(frameBlob);
+    }
+  }, [frameBlob, handleCheckFrame]);
 
   const handleStartCamera = useCallback(async () => {
     setFrameBlob(undefined);
     setFrameCanvasData(undefined);
+    setFrameCheck(undefined);
 
     if (isCameraInit) {
       await startCamera(mediaTrackConstraints);
@@ -152,6 +162,7 @@ export const StoryComponent: FC<StoryComponentProps> = ({
                 <Typography>{ `Расширение: ${frameBlob.type}`}</Typography>
                 <Typography>{ `Ширина: ${frameCanvasData?.width}`}</Typography>
                 <Typography>{ `Высота: ${frameCanvasData?.height}`}</Typography>
+                <Typography>{frameCheck}</Typography>
                 <img
                   src={URL.createObjectURL(frameBlob)}
                   alt="img"
@@ -162,8 +173,6 @@ export const StoryComponent: FC<StoryComponentProps> = ({
             && (
               <Alert severity="error">{error}</Alert>
             )}
-          {gigaResponse
-            && <Typography>{gigaResponse}</Typography>}
         </>
       )}
       <Box

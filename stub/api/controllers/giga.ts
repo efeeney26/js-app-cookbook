@@ -9,22 +9,25 @@ const httpsAgent = new Agent({
 
 config();
 
-async function main() {
+export const getGigaResponse = async (request: Request, response: Response) => {
+  const photo = request.file;
   const client = new GigaChat({
-    timeout: 600,
-    model: 'GigaChat',
+    model: 'GigaChat-Pro',
     httpsAgent,
   });
+  const file = new File([photo?.buffer as BlobPart], 'photo', { type: photo?.mimetype });
+  const uploadedFile = await client.uploadFile(file);
   await client.updateToken();
   const resp = await client.chat({
-    messages: [{ role: 'user', content: 'Привет, как дела?' }],
+    messages: [
+      {
+        role: 'user',
+        content: 'Напиши ответ в виде объекта { quality: качество фото в процентах, content: кратко опиши что на фото }',
+        attachments: [uploadedFile.id],
+      },
+    ],
   });
-  return resp.choices[0]?.message.content;
-}
-
-export const getGigaResponse = async (request: Request, response: Response) => {
-  const gigaResponse = await main();
   response.send({
-    gigaResponse,
+    gigaResponse: resp.choices[0]?.message.content,
   });
 };

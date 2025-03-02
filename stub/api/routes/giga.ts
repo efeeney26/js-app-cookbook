@@ -1,7 +1,9 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
 import { Router } from 'express';
+import multer from 'multer';
 
 import { gigaController } from '../controllers';
 
+const upload = multer();
+
 export const router = Router()
-  .get('/giga', gigaController.getGigaResponse);
+  .post('/giga', upload.single('photo'), gigaController.getGigaResponse);
