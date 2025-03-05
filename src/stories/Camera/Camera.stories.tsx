@@ -21,6 +21,7 @@ export const StoryComponent: FC<StoryComponentProps> = ({
   canvasRenderingContext2DSettings,
 }) => {
   const videoElementRef = useRef<HTMLVideoElement | null>(null);
+  const index = useRef(0);
 
   const {
     isCameraInit,
