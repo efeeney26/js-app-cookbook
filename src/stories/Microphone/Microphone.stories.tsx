@@ -14,6 +14,7 @@ export const StoryComponent: FC = () => {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     const recognition = new SpeechRecognition();
     recognition.continuous = true;
+    recognition.lang = 'ru';
 
     recognition.onresult = (event) => {
       const { transcript } = event.results[index.current][0];
