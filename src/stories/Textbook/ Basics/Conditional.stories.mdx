@@ -1,0 +1,48 @@
+import { Meta } from '@storybook/addon-docs';
+
+<Meta title="Учебник/Основы JavaScript/Условное ветвление: if, '?'" />
+
+[Название JavaScript](https://learn.javascript.ru/ifelse#nazvanie-javascript)
+
+```ts
+const name = prompt('Какое «официальное» название JavaScript?');
+if (name === 'ECMAScript') {
+  alert('Верно');
+} else {
+  alert('Не знаете? ECMAScript!');
+}
+```
+
+[Покажите знак числа](https://learn.javascript.ru/ifelse#pokazhite-znak-chisla)
+
+```ts
+const number = Number(prompt('Введите число'));
+  if (number > 0) {
+    alert(1);
+  } else if (number < 0) {
+    alert(-1);
+  } else {
+    alert(0);
+  }
+```
+
+[Перепишите 'if' в '?'](https://learn.javascript.ru/ifelse#perepishite-if-v)
+
+```ts
+let a: number;
+let b: number;
+const result = (a + b < 4) ? 'Мало' : 'Много';
+```
+
+[Перепишите 'if..else' в '?'](https://learn.javascript.ru/ifelse#perepishite-if-else-v)
+
+```ts
+let login: string;
+let message: string;
+
+ login === 'Сотрудник'
+    ? message = 'Привет'
+    : login === 'Директор'
+      ? message = 'Здравствуйте'
+      : message = '';
+```

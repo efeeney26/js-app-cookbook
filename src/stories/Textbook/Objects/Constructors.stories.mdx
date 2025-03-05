@@ -1,0 +1,36 @@
+import { Meta } from '@storybook/addon-docs';
+
+<Meta title="Учебник/Объекты/Конструктор, оператор 'new'" />
+
+[Создайте калькулятор при помощи конструктора, new Calculator](https://learn.javascript.ru/task/calculator-constructor)
+Неверно типизировано
+```ts
+function Calculator() {
+    this.firstOperand = 0;
+    this.secondOperand = 0;
+    this.read = function () {
+      const firstOperand = window.prompt('Введите первое число', '');
+      this.firstOperand = +(firstOperand as string);
+      const secondOperand = window.prompt('Введите первое число', '');
+      this.secondOperand = +(secondOperand as string);
+    };
+    this.sum = function () {
+      console.info(this.firstOperand + this.secondOperand);
+    };
+    this.mul = function () {
+      console.info(this.firstOperand * this.secondOperand);
+    };
+  }
+```
+
+[Создайте new Accumulator](https://learn.javascript.ru/task/accumulator)
+Неверно типизировано
+```ts
+function Accumulator(startingValue: number) {
+    this.value = startingValue;
+    this.read = function () {
+      const increment = window.prompt('Введите инкремент', '');
+      this.value += +(increment as string);
+    };
+}
+```

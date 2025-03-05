@@ -1,0 +1,58 @@
+import { Meta } from '@storybook/addon-docs';
+
+<Meta title="Учебник/Основы JavaScript/Логические операторы" />
+
+[Проверка значения из диапазона](https://learn.javascript.ru/task/check-if-in-range)
+
+```ts
+const age = Number(prompt('Введите возраст'));
+  if (age >= 14 && age <= 90) {
+    alert('ок');
+  } else {
+    alert('not ok');
+  }
+```
+
+[Проверка значения вне диапазона](https://learn.javascript.ru/task/check-if-out-range)
+
+#### Вариант 1
+
+```ts
+const age = Number(prompt('Введите возраст'));
+  if (age < 14 || age > 90) {
+    alert('ок');
+  } else {
+    alert('not ok');
+  }
+```
+
+#### Вариант 2
+
+```ts
+const age = Number(prompt('Введите возраст'));
+  if (!(age >= 14 && age <= 90)) {
+    alert('ок');
+  } else {
+    alert('not ok');
+  }
+```
+
+[Проверка логина](https://learn.javascript.ru/task/check-login)
+
+```ts
+const login = prompt('Кто там?');
+  if (!login) {
+    alert('Отменено');
+  } else if (login === 'Админ') {
+    const password = prompt('Пароль?');
+    if (!password) {
+      alert('Отменено');
+    } else if (password === 'Я главный') {
+      alert('Здравствуйте!');
+    } else {
+      alert('Неверный пароль');
+    }
+  } else {
+    alert('Я вас не знаю');
+  }
+```

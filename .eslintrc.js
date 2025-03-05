@@ -34,6 +34,10 @@ module.exports = {
     'react/jsx-props-no-spreading': 'off',
     'react/require-default-props': 'off',
     'space-before-blocks': 'off',
-    '@typescript-eslint/space-before-blocks': 'off'
+    '@typescript-eslint/space-before-blocks': 'off',
+    'no-plusplus': 'off',
+    'import/no-extraneous-dependencies': 'off',
+    '@typescript-eslint/no-shadow': 'off',
+    'no-void': 'off',
   },
 };

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useRoutes } from 'react-router-dom';
-import { Main, Demo, Textbook } from '../pages';
+import { Main, Demo } from '../pages';
 
 export const Routes = () => useRoutes([
   {
@@ -10,9 +10,5 @@ export const Routes = () => useRoutes([
   {
     path: 'demo',
     element: <Demo />,
-  },
-  {
-    path: 'textbook',
-    element: <Textbook />,
   },
 ]);

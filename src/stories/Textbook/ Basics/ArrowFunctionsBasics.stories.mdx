@@ -1,0 +1,13 @@
+import { Meta } from '@storybook/addon-docs';
+
+<Meta title="Учебник/Основы JavaScript/Стрелочные функции, основы" />
+
+[Перепишите с использованием функции-стрелки](https://learn.javascript.ru/task/rewrite-arrow)
+```ts
+const ask = (
+    question: string,
+    yes: () => void,
+    no: () => void,
+  ) => (window.confirm(question) ? yes() : no());
+```
+

@@ -1,0 +1,42 @@
+import { Meta } from '@storybook/addon-docs';
+
+<Meta title="Учебник/Объекты/Методы объекта, 'this'" />
+
+[Создайте калькулятор](https://learn.javascript.ru/task/calculator)
+```ts
+const calculator = {
+    firstOperand: 0,
+    secondOperand: 0,
+    read() {
+      const firstOperand = window.prompt('Введите первое число', '');
+      this.firstOperand = +(firstOperand as string);
+      const secondOperand = window.prompt('Введите первое число', '');
+      this.secondOperand = +(secondOperand as string);
+    },
+    sum() {
+      console.info(this.firstOperand + this.secondOperand);
+    },
+    mul() {
+      console.info(this.firstOperand * this.secondOperand);
+    },
+};
+```
+
+[Цепь вызовов](https://learn.javascript.ru/task/chain-calls)
+```ts
+const ladder = {
+    step: 0,
+    up() {
+      this.step++;
+      return this;
+    },
+    down() {
+      this.step--;
+      return this;
+    },
+    showStep() { // показывает текущую ступеньку
+      console.info(this.step);
+      return this;
+    },
+};
+```
