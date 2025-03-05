@@ -11,7 +11,7 @@ export const StoryComponent: FC<{ fileExtension?: string; timeslice?: number }> 
   const { fileExtension, timeslice } = args;
   const microphone = useRef(new Microphone());
   const [audioBlob, setAudioBlob] = useState<Blob>();
-  const [isRecognizeStart, setIsRecognizeStart] = useState(false);
+  const [isNativeRecognitionStart, setIsNativeRecognitionStart] = useState(false);
   const nativeRecognitionIndex = useRef(0);
   const [transcription, setTranscription] = useState('');
 
@@ -35,46 +35,27 @@ export const StoryComponent: FC<{ fileExtension?: string; timeslice?: number }> 
   }, [fileExtension, microphone]);
 
   const handleStartNativeRecognizer = useCallback(async () => {
-    setIsRecognizeStart(true);
+    setIsNativeRecognitionStart(true);
   }, []);
-
-  // useEffect(() => {
-  //   if (isRecognizeStart) {
-  //     const nativeRecognizer = microphone.current.getNativeRecognizer();
-  //     if (nativeRecognizer) {
-  //       nativeRecognizer.onresult = (event: SpeechRecognitionEvent) => {
-  //         const { transcript } = event.results[nativeRecognitionIndex][0];
-  //         setNativeRecognitionIndex((prev) => prev + 1);
-  //         setTranscription((prev) => `${prev} ${transcript}`);
-  //       };
-  //       nativeRecognizer.onerror = (event) => {
-  //         console.log(event.error);
-  //       };
-  //       nativeRecognizer.start();
-  //     }
-  //   }
-  // }, [isRecognizeStart, nativeRecognitionIndex]);
 
   useEffect(() => {
-    const nativeRecognizer = microphone.current.getNativeRecognizer();
-    if (nativeRecognizer) {
-      nativeRecognizer.onresult = (event) => {
-        const { transcript } = event.results[nativeRecognitionIndex.current][0];
-        nativeRecognitionIndex.current += 1;
-        setTranscription((prev) => `${prev} ${transcript}`);
-      };
+    if (isNativeRecognitionStart) {
+      const nativeRecognizer = microphone.current.getNativeRecognizer();
+      if (nativeRecognizer) {
+        nativeRecognizer.onresult = (event) => {
+          const { transcript } = event.results[nativeRecognitionIndex.current][0];
+          nativeRecognitionIndex.current += 1;
+          setTranscription((prev) => `${prev} ${transcript}`);
+        };
 
-      nativeRecognizer.onerror = (event) => {
-        console.error('Speech recognition error detected:', event.error);
-      };
+        nativeRecognizer.onerror = (event) => {
+          console.error('Speech recognition error detected:', event.error);
+        };
 
-      nativeRecognizer.start();
+        nativeRecognizer.start();
+      }
     }
-
-    return () => {
-      nativeRecognizer?.stop();
-    };
-  }, []);
+  }, [isNativeRecognitionStart]);
 
   return (
     <Box
