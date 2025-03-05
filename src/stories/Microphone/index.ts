@@ -91,10 +91,6 @@ export class Microphone {
     this.nativeRecognizer.stop();
   }
 
-  public getNativeRecognizer() {
-    return this.nativeRecognizer;
-  }
-
   private async initMicrophone() {
     this.userMedia = await navigator.mediaDevices.getUserMedia({
       audio: {
