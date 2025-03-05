@@ -7,10 +7,6 @@ export class Microphone {
 
   private readonly nativeRecognizer: SpeechRecognition | null = null;
 
-  private nativeRecognitionIndex = 0;
-
-  public transcript = '';
-
   constructor() {
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- it's ok
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
