@@ -1,5 +1,5 @@
 import React, {
-  type FC, useCallback, useEffect, useRef, useState,
+  type FC, useCallback, useRef, useState,
 } from 'react';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
@@ -11,7 +11,6 @@ export const StoryComponent: FC<{ fileExtension?: string; timeslice?: number }> 
   const { fileExtension, timeslice } = args;
   const microphone = useRef(new Microphone());
   const [audioBlob, setAudioBlob] = useState<Blob>();
-  const [isNativeRecognitionStart, setIsNativeRecognitionStart] = useState(false);
   const [transcription, setTranscription] = useState('');
 
   const startRecord = useCallback(async () => {
@@ -33,30 +32,13 @@ export const StoryComponent: FC<{ fileExtension?: string; timeslice?: number }> 
     }
   }, [fileExtension, microphone]);
 
-  const handleStartNativeRecognizer = useCallback(async () => {
-    setIsNativeRecognitionStart(true);
+  const sendTranscript = useCallback((transcription) => {
+    setTranscription(transcription);
   }, []);
 
-  useEffect(() => {
-    if (isNativeRecognitionStart) {
-      const nativeRecognizer = microphone.current.getNativeRecognizer();
-      if (nativeRecognizer) {
-        nativeRecognizer.onresult = (event) => {
-          const transcript = Array.from(event.results)
-            .map((result) => result[0].transcript)
-            .join('');
-          setTranscription(transcript);
-        };
-
-        nativeRecognizer.onerror = (event) => {
-          setIsNativeRecognitionStart(false);
-          console.error('Speech recognition error detected:', event.error);
-        };
-
-        nativeRecognizer.start();
-      }
-    }
-  }, [isNativeRecognitionStart]);
+  const handleStartNativeRecognizer = useCallback(async () => {
+    microphone.current.nativeRecognizerStart(sendTranscript);
+  }, [sendTranscript]);
 
   const handleStopNativeRecognizer = useCallback(() => {
     microphone.current.nativeRecognizerStop();

@@ -63,25 +63,24 @@ export class Microphone {
     });
   }
 
-  public nativeRecognizerStart(): Promise<string> {
+  public nativeRecognizerStart(sendTranscript: (transcript: string) => void) {
     if (!this.nativeRecognizer) {
       throw new Error('Распознователь речи не проинициализирован');
     }
 
-    return new Promise((resolve, reject) => {
-      if (this.nativeRecognizer) {
-        this.nativeRecognizer.onresult = (event: SpeechRecognitionEvent) => {
-          const transcript = Array.from(event.results)
-            .map((result) => result[0].transcript)
-            .join('');
-          resolve(transcript);
-        };
-        this.nativeRecognizer.onerror = (event) => {
-          reject(event.error);
-        };
-        this.nativeRecognizer.start();
-      }
-    });
+    this.nativeRecognizer.onresult = (event) => {
+      const transcript = Array.from(event.results)
+        .map((result) => result[0].transcript)
+        .join('');
+
+      sendTranscript(transcript);
+    };
+
+    this.nativeRecognizer.onerror = (event) => {
+      console.error('Speech recognition error detected:', event.error);
+    };
+
+    this.nativeRecognizer.start();
   }
 
   public nativeRecognizerStop() {
