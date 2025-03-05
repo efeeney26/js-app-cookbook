@@ -16,6 +16,7 @@ export class Microphone {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     this.nativeRecognizer = new SpeechRecognition();
     this.nativeRecognizer.continuous = true;
+    this.nativeRecognizer.interimResults = true;
     this.nativeRecognizer.lang = 'ru';
   }
 
@@ -74,10 +75,10 @@ export class Microphone {
     return new Promise((resolve, reject) => {
       if (this.nativeRecognizer) {
         this.nativeRecognizer.onresult = (event: SpeechRecognitionEvent) => {
-          const { transcript } = event.results[this.nativeRecognitionIndex][0];
+          const transcript = Array.from(event.results)
+            .map((result) => result[0].transcript)
+            .join('');
           resolve(transcript);
-          this.nativeRecognitionIndex += 1;
-          this.transcript += transcript;
         };
         this.nativeRecognizer.onerror = (event) => {
           reject(event.error);

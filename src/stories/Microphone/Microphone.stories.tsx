@@ -12,7 +12,6 @@ export const StoryComponent: FC<{ fileExtension?: string; timeslice?: number }> 
   const microphone = useRef(new Microphone());
   const [audioBlob, setAudioBlob] = useState<Blob>();
   const [isNativeRecognitionStart, setIsNativeRecognitionStart] = useState(false);
-  const nativeRecognitionIndex = useRef(0);
   const [transcription, setTranscription] = useState('');
 
   const startRecord = useCallback(async () => {
@@ -43,12 +42,14 @@ export const StoryComponent: FC<{ fileExtension?: string; timeslice?: number }> 
       const nativeRecognizer = microphone.current.getNativeRecognizer();
       if (nativeRecognizer) {
         nativeRecognizer.onresult = (event) => {
-          const { transcript } = event.results[nativeRecognitionIndex.current][0];
-          nativeRecognitionIndex.current += 1;
-          setTranscription((prev) => `${prev} ${transcript}`);
+          const transcript = Array.from(event.results)
+            .map((result) => result[0].transcript)
+            .join('');
+          setTranscription(transcript);
         };
 
         nativeRecognizer.onerror = (event) => {
+          setIsNativeRecognitionStart(false);
           console.error('Speech recognition error detected:', event.error);
         };
 
