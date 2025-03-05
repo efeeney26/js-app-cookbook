@@ -57,6 +57,10 @@ export const StoryComponent: FC<{ fileExtension?: string; timeslice?: number }> 
     }
   }, [isNativeRecognitionStart]);
 
+  const handleStopNativeRecognizer = useCallback(() => {
+    microphone.current.nativeRecognizerStop();
+  }, []);
+
   return (
     <Box
       display="flex"
@@ -68,6 +72,7 @@ export const StoryComponent: FC<{ fileExtension?: string; timeslice?: number }> 
       </Box>
       <Box>
         <Button variant="contained" onClick={handleStartNativeRecognizer}>Начать распознование речи(нативный распознователь)</Button>
+        <Button variant="contained" onClick={handleStopNativeRecognizer}>Закончить распознование речи(нативный распознователь)</Button>
       </Box>
       {audioBlob
         && (
